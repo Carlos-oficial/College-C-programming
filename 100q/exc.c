@@ -169,31 +169,206 @@ int removeMaiorL(LInt *l) {
   (*acc) = (**acc).prox;
   return maior;
 }
+void init(LInt *l) {
+  while ((*l)->prox) {
+    l = &(*l)->prox;
+  }
+  *l = NULL;
+  free(*l);
+}
+
+void appendL(LInt *l, int x) {
+  while (*l) {
+    l = &(*l)->prox;
+  }
+  *l = new_node(x);
+}
+
+void concatL(LInt *a, LInt b) {
+  while (*a) {
+    a = &(*a)->prox;
+  }
+  *a = b;
+}
+LInt cloneL(LInt l) {
+  if (!l)
+    return NULL;
+  LInt fst = malloc(sizeof(Node));
+  fst->valor = l->valor;
+  fst->prox = NULL;
+  LInt prev = fst;
+  l = l->prox;
+  while (l) {
+    LInt new = new_node(l->valor);
+    prev->prox = new;
+    prev = new;
+    l = l->prox;
+  }
+  return fst;
+}
+LInt cloneRev(LInt l) {
+  if (!l)
+    return NULL;
+  LInt fst = malloc(sizeof(Node));
+  fst->valor = l->valor;
+  fst->prox = NULL;
+  LInt prev = fst;
+  l = l->prox;
+  if (!l)
+    return NULL;
+  while (l) {
+    LInt new = new_node(l->valor);
+    new->prox = prev;
+    prev = new;
+    l = l->prox;
+  }
+  return prev;
+}
+
+int maximo(LInt l) {
+  int acc = l->valor;
+  while (l) {
+    if (l->valor > acc)
+      acc = l->valor;
+    l = l->prox;
+  }
+  return acc;
+}
+
+int take(int n, LInt *l) {
+  while (n && *l) {
+    l = &(*l)->prox;
+    n -= 1;
+  }
+  int i = 0;
+  while (*l) {
+    i++;
+    Node a = **l;
+    free(*l);
+    *l = (a).prox;
+  }
+  printf("%d taken\n", i);
+  return i;
+}
+
+int drop(int n, LInt *l) {
+  int i = 0;
+  while (*l && n) {
+    LInt *a = &(*l)->prox;
+    //  free(l);
+    *l = *a;
+    n--;
+    i++;
+  }
+  return i;
+}
+
+void cycle(LInt *l) {
+  LInt fst = *l;
+  while (*l) {
+    l = &(*l)->prox;
+  }
+  *l = fst;
+}
+
+void printC(LInt l) {
+  LInt fst = l;
+  if (l == NULL)
+    return;
+  do {
+    printf("%d ", l->valor);
+    l = l->prox;
+  } while (l != fst);
+  printf("\n");
+}
+
+LInt Nforward(LInt l, int N) {
+  while (N) {
+    l = l->prox;
+    N--;
+  }
+  return l;
+}
+
+LInt arrayToList(int *arr, int len) {
+  LInt list = malloc(sizeof(Node));
+  LInt fst = list;
+  for (int i = 0; i < len - 1; i++) {
+    LInt new = new_node(arr[i + 1]);
+    list->valor = arr[i];
+    list->prox = new;
+    list = list->prox;
+  }
+  return fst;
+}
+LInt somasAcL(LInt l) {
+  int soma = 0;
+  if (!l)
+    return NULL;
+  LInt fst = malloc(sizeof(Node));
+  fst->valor = soma += l->valor;
+  fst->prox = NULL;
+  LInt prev = fst;
+  l = l->prox;
+  while (l) {
+    LInt new = new_node(soma += l->valor);
+    prev->prox = new;
+    prev = new;
+    l = l->prox;
+  }
+  return fst;
+}
+
+void remreps(LInt l) {
+  LInt prev = NULL;
+
+  while (l) {
+    if (prev && (l->valor == prev->valor)) {
+      LInt a = l->prox;
+      free(l);
+      l = a;
+      prev->prox = l;
+    } else
+      prev = l;
+    l = l->prox;
+  }
+}
+
+LInt rotateL(LInt l) {
+  if (!(l || l->prox))
+    return l;
+  LInt initL = l->prox;
+  LInt fst = l;
+  while (l->prox != NULL) {
+    l = l->prox;
+  }
+  l->prox = fst;
+  fst->prox = NULL;
+  return initL;
+}
+
+LInt parte(LInt l) {
+  LInt output = malloc(sizeof(Node)), prev_out = NULL;
+  LInt *fst = &output;
+  LInt prev = NULL, aux;
+  while (l) {
+    if (l->valor % 2 == 1) {
+      output = l;
+      prev_out->prox = output;
+      output->prox = NULL; //
+      aux = l->prox;
+      prev->prox = aux;
+      l = aux;
+    } else{
+      prev = l;
+      l = l->prox;}
+  }
+  return *fst;
+}
 
 int main() {
-  int arr1[] = {1, 3, 5, 7};
-  int arr2[] = {2, 4, 6, 8};
+  int arr1[] = {1, 2, 3, 4, 5, 6};
   LInt l1 = malloc(sizeof(Node));
-  LInt l2 = malloc(sizeof(Node));
-  generate_from_array(arr1, 4, &l1);
-  generate_from_array(arr2, 4, &l2);
-  LInt l3 = NULL;
-  merge(&l3, l1, l2);
-  printl(l3);
-  LInt *mx = malloc(sizeof(LInt));
-  *mx = NULL;
-  LInt *Mx = malloc(sizeof(LInt));
-  *Mx = NULL;
-  splitQS(l3, 5, mx, Mx);
-  printl(*mx);
-  printl(*Mx);
-  printl(parteAmeio(&l3));
-  int arr3[] = {1, 1, 3, 5, 5};
-  LInt l4 = malloc(sizeof(Node));
-  generate_from_array(arr3, 5, &l4);
-  // removeDups(&l4);
-  printf("maior: %d\n", removeMaiorL(&l4));
-  printl(l4);
-  removeOneOrd(&l4, 3);
-  printl(l4);
+  generate_from_array(arr1, 6, &l1);
+  printl(parte(l1));
 }
