@@ -169,6 +169,7 @@ int removeMaiorL(LInt *l) {
   (*acc) = (**acc).prox;
   return maior;
 }
+
 void init(LInt *l) {
   while ((*l)->prox) {
     l = &(*l)->prox;
@@ -190,6 +191,7 @@ void concatL(LInt *a, LInt b) {
   }
   *a = b;
 }
+
 LInt cloneL(LInt l) {
   if (!l)
     return NULL;
@@ -372,3 +374,4 @@ int main() {
   generate_from_array(arr1, 6, &l1);
   printl(parte(l1));
 }
+

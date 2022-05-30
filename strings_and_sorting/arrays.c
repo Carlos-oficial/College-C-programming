@@ -72,6 +72,7 @@ int partition_Arr(int v[], int N, int x) {// partition with auxiliary arrays
   free(arr2);
   return n1;
 }
+
 int partition_IP(int v[], int N, int x) { // partition in place
   int i = 0, j = N-1;
   while (i < j) {
